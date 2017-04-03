@@ -14,7 +14,7 @@ app.set('view engine', 'jade');
 
 app.use('/', router)
 
-app.listen(80, '192.168.0.192', function () {
+app.listen(80, function () {
   console.log('Enigma is listening')
 })
 
