@@ -1,10 +1,10 @@
 {
-  "name": "mongoose",
+  "name": "enigma",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-  "start": "node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "body-parser": "^1.17.1",
@@ -14,8 +14,14 @@
     "cookie-parser": "1.4.3"
   },
   "devDependencies": {},
-
   "author": "",
-  "license": "ISC"
-
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenanEkici/Basic_Security.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kenanEkici/Basic_Security/issues"
+  },
+  "homepage": "https://github.com/kenanEkici/Basic_Security#readme"
 }
