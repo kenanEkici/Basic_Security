@@ -14,9 +14,11 @@ app.set('view engine', 'jade');
 
 app.use('/', router)
 
-app.listen(80, function () {
-  console.log('Enigma is listening')
-})
+app.set('port', (process.env.PORT || 5000));
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
+
 
 
 // var https = require('https');
