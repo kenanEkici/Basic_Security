@@ -1,0 +1,104 @@
+doctype
+html
+  head
+    style
+      include chat.css 
+body
+ | <script>
+ include ../keepersfind.js
+ | </script>
+div(id="send")
+  - var usr = received[0];
+  - var userLoggedIn = received[1];
+  - var receivedMessages = received[2];
+  script(type='text/javascript').
+    var keysOfUser = "#{received[1].keys}";  
+    var amountOfKeys = '#{received[1].keys.length}';
+
+    function noEncryption()
+    {
+      document.getElementById("sender").value = document.getElementById("text").value;
+    }
+    function encryptContent()
+    {
+      var selectedMethod = document.getElementById("selectedMethod").value
+      if (selectedMethod=="AES")
+      {
+          var content = document.getElementById("text");                  
+          var encryptedMessage = encryptWithAes(content.value, "#{received[1].keys}".split(',')[[document.getElementById("receiver").selectedIndex]]); 
+          document.getElementById("sender").value = encryptedMessage;
+          alert("message encrypted");         
+      }
+      else if(selectedMethod == "RSA")
+      {
+          
+      }      
+    }
+    function decryptContent(id)
+    {
+      var content = document.getElementById(id+"p");
+      var sender = document.getElementById(id+"s").innerHTML;
+      var method = document.getElementById(id+"i").value;
+      
+      if (method=="AES")
+      {
+          var key;
+          var users = ['Kenan','Evren'];
+          for (var i = 0; i < users.length; i++){
+              if (users[i] == sender)
+              {
+                key = ("#{received[1].keys}".split(',')[i]);
+              }     
+          } 
+
+          content.innerHTML = decryptWithAes(content.innerHTML,key);       
+      }
+      else if(method=="RSA")
+      {
+
+      }
+      else
+      {
+        
+      }
+
+    }
+  form(name="logout", method="post", action="/logout")
+    input(type="submit", class="settings", id="logout", value="logout")
+    input(type="submit", class="settings", id="profile", value="profile")
+  form(name="text", method="post", action="/send")
+    br
+    span(name="sender", id="welcomeText") Welcome back 
+    span(id="loggedInUser")= received[1].username
+    br
+    br
+    textarea(name="messageContent", id="text", placeholder="message to be encrypted",rows="10", cols="187", onchange='noEncryption()')
+    br
+    span(class="blob") Receiver: 
+    select(name="selectedUser", id="receiver")
+      - for (var i = 0; i< usr.length; i++)    
+        option(name="user"+i)= usr[i].username
+    span(class="blob") Encrypting method
+    select(name="selectedMethod", id="selectedMethod")
+       option="None"
+       option="RSA"
+       option="AES" 
+    input(type="submit", class="blob", value="Send message", onclick='encryptContent()')
+    input(type="hidden", id="sender",name="encryptedMessage")
+h1
+div(id="receive")
+  h1 Your messages
+  ul
+  form(name="delete", method="post", action="/delete")
+    - for (var i = 0; i< receivedMessages.length; i++)    
+       li
+         span(id="m"+i+"s")= receivedMessages[i].sender
+         div(id="content")
+           p(id="m"+i+"p")= value= receivedMessages[i].content
+           input(type="submit", name="toBeDeleted", value=receivedMessages[i]._id)
+           input(type="button", id="m"+i, value="decrypt", onclick='decryptContent(this.id)')
+           input(id="m"+i+"i", value=receivedMessages[i].encryptedWith)
+          
+
+     
+     

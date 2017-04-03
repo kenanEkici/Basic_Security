@@ -1,0 +1,17 @@
+doctype
+html
+  head
+    style
+      include index.css
+  body
+    .loginscreen
+      form(name='inlogform', method='post')
+        p= message
+        h1#headline Login to Enigma
+        span Username
+        input#usernameInput(name='username', type='text')
+        br
+        span Password
+        input#passwordInput(type='password', name='hash')
+        br
+        input(type='submit', value='Login')

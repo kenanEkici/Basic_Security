@@ -1,0 +1,17 @@
+codewise
+what the hell is mean
+no angular used
+jade is a pita
+how to use server libraries in browser
+keep code clean and readable (javascript kek)
+callback hell 
+key management (how???) 
+javascript VS jade compiler
+
+
+securitywise
+cookies = easy to change yourself
+browser javascript = cross-site attacks
+keys send in plain text 
+no https (doesnt seem to work) 
+avoid two different sessions
