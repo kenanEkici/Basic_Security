@@ -8,10 +8,11 @@
   },
   "dependencies": {
     "body-parser": "^1.17.1",
+    "cookie-parser": "1.4.3",
     "express": "^4.15.2",
     "jade": "^1.11.0",
     "mongoose": "^4.9.2",
-    "cookie-parser": "1.4.3"
+    "node-rsa": "^0.4.2"
   },
   "devDependencies": {},
   "author": "",

@@ -22,7 +22,6 @@ var object = {'info':[]}
 repo.user.getAllUsers(function(users)
 {
 	allClients = users;
-	console.log(users);
 	for(var i = 0; i < allClients.length; i++)
 	{
 		usernames.push(allClients[i].username);
