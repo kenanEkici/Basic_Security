@@ -5,19 +5,20 @@ var Message = model.message;
 module.exports = 
 {
 
-sendMessage: function(ctt, sen, rec, ecrypt,callback)
-{
-	
+sendMessage: function(pt1, pt2, pt3, receiver, sender,callback)
+{	
 	var message = new Message({
-		content: ctt,
-		sender: sen,
-		receiver: rec,
-		encryptedWith: ecrypt	
+		part1: pt1,
+		part2: pt2,
+		part3: pt3,
+		receiver: receiver,
+		sender: sender	
 	});
 
 	message.save()
+	console.log('Message from ' + sender + ' to ' + receiver + ' has been send');
 	return callback();
-	console.log('Message from ' + sen + ' to ' + rec + ' has been send');
+	
 },
 
 synchAllMessages: function(rec, callback)

@@ -10,6 +10,18 @@ body
 	
 }
 
+.verified
+{
+	font-weight: bold;
+	color: green;
+}
+
+.notverified
+{
+	font-weight: bold;
+	color: red;
+}
+
 #receive
 {
 	margin-left:30px;
@@ -66,7 +78,7 @@ h1
 	margin:10px;
 }
 
-#loggedInUser
+#loggedInUsername
 {
 	font-size:20pt;
 	color: #aacbff;

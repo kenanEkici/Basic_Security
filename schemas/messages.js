@@ -5,10 +5,11 @@ var Schema = mongoose.Schema;
 var messagesSchema = new Schema(
 {
 	id: Number,
-	content: {type: String},
-	sender: {type: String},
+	part1: {type: String},
+	part2: {type: String},
+	part3: {type: String},
 	receiver: {type: String},
-	encryptedWith: {type: String}
+	sender: {type: String}
 });
 
 var Message = mongoose.model('Message', messagesSchema);

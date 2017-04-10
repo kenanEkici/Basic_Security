@@ -1,8 +1,9 @@
-//packages//___________________________
+//packages
 var express = require('express');
 var app = express();
 var router = express.Router()
 var path = require('path');
+var NodeRSA = require('node-rsa');
 
 //NAMESPACES
 var repo = require('./../repos');
@@ -14,12 +15,59 @@ app.set('views', path.join(__dirname, 'views'));
 
 //globals
 var allClients;
+var publicKeys = new Array();
+var usernames = new Array();
+var object = {'info':[]}
 
 repo.user.getAllUsers(function(users)
 {
-	allClients = users; 
+	allClients = users;
+	console.log(users);
+	for(var i = 0; i < allClients.length; i++)
+	{
+		usernames.push(allClients[i].username);
+        publicKeys.push(allClients[i].publicKey);	
+	}
 	//everytime someone registers, this should be refreshed
 });
+
+
+// var keyBob = new NodeRSA({b: 512}); 
+// var publicBob = keyBob.exportKey('public');
+// var privateBob = keyBob.exportKey('private');
+
+// var keyAlice = new NodeRSA({b: 512}); 
+// var publicAlice = keyAlice.exportKey('public');
+// var privateAlice = keyAlice.exportKey('private');
+
+// var key = new NodeRSA();
+// key.importKey(publicAlice,'public');
+// key.importKey(privateBob, 'private');
+
+// var message = "hi alice";
+// var encrypted = key.encrypt(message);
+
+// var key2 = new NodeRSA();
+// key2.importKey(privateAlice,'private');
+
+
+
+// repo.user.setPublicAndPrivateKey('Bob', publicBob, privateBob, function(c)
+// {
+// 	console.log('done');
+// })
+
+// repo.user.pushSymmetricKeyToUser('Bob', 'Alice,secretKey', function(key)
+// {
+// 	console.log('done');
+// })
+
+// repo.user.emptySymmetricKeys('Alice', function(done)
+// {
+// 	console.log('done');
+// })
+
+
 
 
 //_____________________________________________________
@@ -101,7 +149,7 @@ router.get('/chat', function(req,res) //click on send
 	{
 		repo.message.synchAllMessages(userTryingToLogin, function(messages)
 		{
-			res.render('chatinterface.jade', {received : [allClients,userTryingToLogin,messages, encryption]})		
+			res.render('chatinterface.jade', {received : [userTryingToLogin,messages, allClients] })		
 		})		
 	}
 	else
@@ -112,7 +160,7 @@ router.get('/chat', function(req,res) //click on send
 
 router.post('/send', function(req,res) //click on send
 {	 
-	repo.message.sendMessage(req.body.encryptedMessage, req.cookies['enigmacode'], req.body.selectedUser, req.body.selectedMethod, function()
+	repo.message.sendMessage(req.body.f1,  req.body.f2, req.body.f3, req.body.receiverOfMessage,req.cookies['enigmacode'], function()
 	{
 		res.redirect('/chat');
 	});	

@@ -63,17 +63,22 @@ pushSymmetricKeyToUser : function(usern, newkey, callback)
 
 emptySymmetricKeys : function(usern,callback)
 {
-	User.update({username:usern}, {$set: {keys: []}}, callback);
+	User.update({username:usern}, { $set: { symmetricKeys: [] }}, callback);
 },
 
 setPublicAndPrivateKey: function(usr, public, private, callback)
 {
-	User.findOneAndUpdate({username : usr}, {publicKey: public}, {privateKey: private}, function(err,user){
+	User.findOneAndUpdate({username : usr}, {publicKey: public, privateKey: private}, function(err,user){
 		if (err) throw err;
 
 		return callback(user);
 	});
-},
+}, 
+
+emptyPublicAndPrivateKey: function(usr, callback)
+{
+	User.update({username:usr}, {$set: {publicKey : "", privateKey : ""}}, callback);
+}
 
 
 };

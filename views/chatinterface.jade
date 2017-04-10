@@ -5,86 +5,47 @@ html
       include chat.css 
 body
  | <script>
- include ../keepersfind.js
+ include ../public/keepersfindRsa.js
+ | </script>
+ | <script>
+ include ../public/keepersfindAes.js
+ | </script>
+ | <script>
+ include ../Encryption/HashClient.js
+ | </script>
+ | <script>
+ include ../public/encryptScript.js
  | </script>
 div(id="send")
-  - var usr = received[0];
-  - var userLoggedIn = received[1];
-  - var receivedMessages = received[2];
+  - var receivedMessages = received[1];
+  - var users = received[2];
   script(type='text/javascript').
-    var keysOfUser = "#{received[1].keys}";  
-    var amountOfKeys = '#{received[1].keys.length}';
-
-    function noEncryption()
-    {
-      document.getElementById("sender").value = document.getElementById("text").value;
-    }
-    function encryptContent()
-    {
-      var selectedMethod = document.getElementById("selectedMethod").value
-      if (selectedMethod=="AES")
-      {
-          var content = document.getElementById("text");                  
-          var encryptedMessage = encryptWithAes(content.value, "#{received[1].keys}".split(',')[[document.getElementById("receiver").selectedIndex]]); 
-          document.getElementById("sender").value = encryptedMessage;
-          alert("message encrypted");         
-      }
-      else if(selectedMethod == "RSA")
-      {
-          
-      }      
-    }
-    function decryptContent(id)
-    {
-      var content = document.getElementById(id+"p");
-      var sender = document.getElementById(id+"s").innerHTML;
-      var method = document.getElementById(id+"i").value;
-      
-      if (method=="AES")
-      {
-          var key;
-          var users = ['Kenan','Evren'];
-          for (var i = 0; i < users.length; i++){
-              if (users[i] == sender)
-              {
-                key = ("#{received[1].keys}".split(',')[i]);
-              }     
-          } 
-
-          content.innerHTML = decryptWithAes(content.innerHTML,key);       
-      }
-      else if(method=="RSA")
-      {
-
-      }
-      else
-      {
-        
-      }
-
-    }
+    var symmetricKeysOfUser = "#{received[0].symmetricKeys}"; 
+    var amountOfKeys = ['#{received[0].symmetricKeys}'].length; 
   form(name="logout", method="post", action="/logout")
     input(type="submit", class="settings", id="logout", value="logout")
     input(type="submit", class="settings", id="profile", value="profile")
-  form(name="text", method="post", action="/send")
+  form(name="message", method="post", action="/send")
     br
     span(name="sender", id="welcomeText") Welcome back 
-    span(id="loggedInUser")= received[1].username
+    span(id="loggedInUsername")= received[0].username
+    input(id="loggedInUserPublic", type="hidden", value=received[0].publicKey)
+    input(id="loggedInUserPrivate", type="hidden", value=received[0].privateKey)
     br
     br
-    textarea(name="messageContent", id="text", placeholder="message to be encrypted",rows="10", cols="187", onchange='noEncryption()')
+    textarea(name="messageContent", id="text", placeholder="message to be encrypted",rows="10", cols="187")
+    br
+    input(type="file", id="file", onchange='chooseFromFile()')
     br
     span(class="blob") Receiver: 
     select(name="selectedUser", id="receiver")
-      - for (var i = 0; i< usr.length; i++)    
-        option(name="user"+i)= usr[i].username
-    span(class="blob") Encrypting method
-    select(name="selectedMethod", id="selectedMethod")
-       option="None"
-       option="RSA"
-       option="AES" 
-    input(type="submit", class="blob", value="Send message", onclick='encryptContent()')
-    input(type="hidden", id="sender",name="encryptedMessage")
+     - for(var i = 0; i < users.length; i++)
+       option(value=users[i].publicKey)= users[i].username
+    input(type="submit", class="blob", value="Send message", onclick='encryptingProc()')
+    input(type="hidden", id="file_1",name="f1")
+    input(type="hidden", id="file_2",name="f2")
+    input(type="hidden", id="file_3",name="f3")
+    input(type="hidden", id="rec",name="receiverOfMessage")
 h1
 div(id="receive")
   h1 Your messages
@@ -92,12 +53,15 @@ div(id="receive")
   form(name="delete", method="post", action="/delete")
     - for (var i = 0; i< receivedMessages.length; i++)    
        li
-         span(id="m"+i+"s")= receivedMessages[i].sender
+         span(id=i+"s")= receivedMessages[i].sender
          div(id="content")
-           p(id="m"+i+"p")= value= receivedMessages[i].content
+           p(id=i+"f1")= receivedMessages[i].part1
+           p(id=i+"f2")= receivedMessages[i].part2
+           p(id=i+"f3")= receivedMessages[i].part3
            input(type="submit", name="toBeDeleted", value=receivedMessages[i]._id)
-           input(type="button", id="m"+i, value="decrypt", onclick='decryptContent(this.id)')
-           input(id="m"+i+"i", value=receivedMessages[i].encryptedWith)
+           input(type="button", id=i, value="decrypt", onclick='decryptContent(this.id)')
+           p(class="verified" ,id=i+"v")
+           p(class="notverified" ,id=i+"nv")
           
 
      
