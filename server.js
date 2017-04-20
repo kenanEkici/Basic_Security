@@ -1,5 +1,6 @@
 var express = require('express')
 var app = express();
+var path = require('path');
 
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set('view engine', 'jade');
 
+app.use('/public',express.static(path.join(__dirname,'public')))
 app.use('/', router)
 
 app.set('port', (process.env.PORT || 5000));

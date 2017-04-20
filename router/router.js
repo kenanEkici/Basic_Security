@@ -11,6 +11,7 @@ var model = require('./../schemas');
 var encryption = require('./../encryption');
 app.set('views', path.join(__dirname, 'views'));
 
+
 //app settings
 
 //globals

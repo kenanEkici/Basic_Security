@@ -1,36 +1,65 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 body 
 {
-  background-color: #061402;
-  left: 0;
+  
   margin: 0;
   overflow: hidden;
   position: relative;
+  color:#F5F5F5;
+  text-shadow: 1px 1px black;
+  background-color: #EEEEEE;
+  width: 100%;
+  height:100%;
+  overflow:auto;
 
 }
 
 .loginscreen
 {	
-	background-color: #dbf2d5;
+	background: url(../public/images/backgroundLogin.png);	
 	margin: auto;
 	width: 20%;
 	border: 3px solid black;
-	padding:20px 0;
 	padding-left: 50px;
+	padding-right: 50px;
 	margin-top: 10%;	
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 input
 {
-	font-family: monospace;
+	margin-top:3%;
+	font-family: Roboto;
+}
+input:hover
+{
+	background-color: #757575;
+}
+
+input[type="submit"]
+{
+	width: 100%;
+	font-size: 12pt;
+	height:50px;
+	background-color: #E0E0E0;
+}
+
+input[type="submit"]:hover
+{
+	background-color: #BDBDBD;
+	color:white;
+	text-shadow: 8px 5px gray;
 }
 span
 {
-	font-family: monospace;
+	font-family: Roboto;
 }
 #headline
 {
 	font-size: 18pt;
-	font-family: monospace;
+	font-family: Roboto;
 }
 
 .inlogform
@@ -41,11 +70,17 @@ span
 #usernameInput
 {
 	display: block;
-	width: 60%;
+	width: 100%;
 }
 
 #passwordInput
 {
 	display: block;
-	width: 60%;
+	width: 100%;
+}
+
+p
+{
+	color: #E57373;
+	font-family: Roboto;
 }
