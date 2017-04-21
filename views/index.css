@@ -2,22 +2,22 @@
 
 body 
 {
-  
-  margin: 0;
-  overflow: hidden;
-  position: relative;
-  color:#F5F5F5;
-  text-shadow: 1px 1px black;
-  background-color: #EEEEEE;
-  width: 100%;
-  height:100%;
-  overflow:auto;
+  	background: url(../public/images/loginBackground.gif) no-repeat;
+  	background-size:100%;
+	margin: 0;
+  	overflow: hidden;
+  	position: relative;
+  	color:#EEEEEE;
+  	text-shadow: 1px 1px black; 
+  	width: 100%;
+  	height:100%;
+  	overflow:auto;
 
 }
 
 .loginscreen
-{	
-	background: url(../public/images/backgroundLogin.png);	
+{		
+	background-color: #757575;
 	margin: auto;
 	width: 20%;
 	border: 3px solid black;
@@ -35,7 +35,7 @@ input
 }
 input:hover
 {
-	background-color: #757575;
+	background-color: #E0E0E0;
 }
 
 input[type="submit"]
@@ -43,7 +43,8 @@ input[type="submit"]
 	width: 100%;
 	font-size: 12pt;
 	height:50px;
-	background-color: #E0E0E0;
+	color:white;
+	background-color: #9E9E9E;
 }
 
 input[type="submit"]:hover
