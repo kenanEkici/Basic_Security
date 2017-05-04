@@ -5,6 +5,7 @@ var router = express.Router()
 var path = require('path');
 var NodeRSA = require('node-rsa');
 
+
 //NAMESPACES
 var repo = require('./../repos');
 var model = require('./../schemas');
@@ -19,6 +20,8 @@ var allClients;
 var publicKeys = new Array();
 var usernames = new Array();
 var object = {'info':[]}
+
+
 
 repo.user.getAllUsers(function(users)
 {
@@ -76,7 +79,7 @@ repo.user.getAllUsers(function(users)
 //users requests the index 
 router.get('/', function(req,res)
 {
-	res.render('welcomeScreen.jade'	);
+	res.render('welcomeScreen.pug');
 	console.log("Request from:  " + req.ip + " : " + req.method );
 });
 
@@ -93,7 +96,7 @@ router.get('/login', function(req,res)
 {
 	if (req.cookies['enigmacode'] == "" || req.cookies['enigmacode'] == null )
 	{
-		res.render('inlog.jade', {message : ""}
+		res.render('inlog.pug', {message : ""}
 		);
 	}
 	else
@@ -118,13 +121,13 @@ router.post('/login', function(req,res)
 			}
 			else
 			{
-				res.render('inlog.jade', {message : "invalid password or user"}
+				res.render('inlog.pug', {message : "invalid password or user"}
 				);
 			}
 		}
 		else
 		{
-			res.render('inlog.jade', {message : "invalid password or user"}
+			res.render('inlog.pug', {message : "invalid password or user"}
 			);	
 		}						
 	});			
@@ -149,7 +152,7 @@ router.get('/chat', function(req,res) //click on send
 	{
 		repo.message.synchAllMessages(userTryingToLogin, function(messages)
 		{
-			res.render('chatinterface.jade', {received : [userTryingToLogin,messages, allClients] })		
+			res.render('chatinterface.pug', {received : [userTryingToLogin,messages, allClients] })
 		})		
 	}
 	else

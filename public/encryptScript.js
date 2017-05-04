@@ -37,6 +37,7 @@ function encryptingProc()
     }
     function decryptContent(id)
     {
+     
     	var f1 = document.getElementById(id+'f1').innerHTML;
     	var f2 = document.getElementById(id+'f2').innerHTML;
     	var f3 = document.getElementById(id+'f3').innerHTML;
@@ -46,7 +47,7 @@ function encryptingProc()
     	var keyRetrieved = decryptWithRsa(privateKeyOfReceiver, f2);
       var originalMessage = decryptWithAes(f1, keyRetrieved);
 
-      if (originalMessage.hashCode() == decryptWithRsaPublic(publicKeyOfSender,f3))
+      if (originalMessage.hashCode() == decryptWithRsaPublic(publicKeyOfSender,f3)) // --> debug
       {
           document.getElementById(id+'v').innerHTML = "verified";
       }
