@@ -9,7 +9,7 @@ html
   include ../node_modules/socket.io-client/dist/socket.io.js
   | </script>
   script.
-      var socket = io('http://localhost:5000');
+      var socket = io('https://basicsecurity.herokuapp.com',{secure: true});
   div(class='jumbotron text-center')
    h1 Welcome to the Enigma homepage.
    <br>
