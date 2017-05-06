@@ -5,11 +5,6 @@ html
    include welcomeScreen.css
   link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', rel='stylesheet')
  body
-  | <script>
-  include ../node_modules/socket.io-client/dist/socket.io.js
-  | </script>
-  script.
-      var socket = io('https://basicsecurity.herokuapp.com',{secure: true});
   div(class='jumbotron text-center')
    h1 Welcome to the Enigma homepage.
    <br>

@@ -17,7 +17,7 @@ sendMessage: function(pt1, pt2, pt3, receiver, sender,callback)
 
 	message.save()
 	console.log('Message from ' + sender + ' to ' + receiver + ' has been send');
-	return callback();
+	return callback(message);
 	
 },
 

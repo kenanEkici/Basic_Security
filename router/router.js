@@ -5,7 +5,6 @@ var router = express.Router()
 var path = require('path');
 var NodeRSA = require('node-rsa');
 
-
 //NAMESPACES
 var repo = require('./../repos');
 var model = require('./../schemas');
@@ -33,6 +32,7 @@ repo.user.getAllUsers(function(users)
 	}
 	//everytime someone registers, this should be refreshed
 });
+
 
 
 // var keyBob = new NodeRSA({b: 512}); 
@@ -166,7 +166,7 @@ router.post('/send', function(req,res) //click on send
 	repo.message.sendMessage(req.body.f1,  req.body.f2, req.body.f3, req.body.receiverOfMessage,req.cookies['enigmacode'], function()
 	{
 		res.redirect('/chat');
-	});	
+	});
 });
 
 router.post('/logout', function(req,res)

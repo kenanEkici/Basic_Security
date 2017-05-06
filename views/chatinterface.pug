@@ -2,8 +2,13 @@ doctype
 html
   head
     style
-      include chat.css 
+      include chat.css
+    title Chat Enigma
 body
+ script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+ | <script>
+ include ../node_modules/socket.io-client/dist/socket.io.js
+ | </script>
  | <script>
  include ../public/keepersfindRsa.js
  | </script>
@@ -25,7 +30,6 @@ div(id="send")
   form(name="logout", method="post", action="/logout")
     input(type="submit", class="settings", id="logout", value="logout")
     input(type="submit", class="settings", id="profile", value="profile")
-  form(name="message", method="post", action="/send")
     br
     span(name="sender", id="welcomeText") Welcome back 
     span(id="loggedInUsername")= received[0].username
@@ -41,7 +45,7 @@ div(id="send")
     select(name="selectedUser", id="receiver")
      - for(var i = 0; i < users.length; i++)
        option(value=users[i].publicKey)= users[i].username
-    input(type="submit", class="blob", value="Send message", onclick='encryptingProc()')
+    input(type="button", class="blob", value="Send message", onclick='encryptingProc()')
     input(type="hidden", id="file_1",name="f1")
     input(type="hidden", id="file_2",name="f2")
     input(type="hidden", id="file_3",name="f3")
@@ -50,7 +54,7 @@ h1
 div(id="receive")
   h1 Your messages
   ul
-  form(name="delete", method="post", action="/delete")
+  form(name="delete" id="messagesList" method="post" action="/delete")
     - for (var i = 0; i< receivedMessages.length; i++)    
        li
          span(id=i+"s")= receivedMessages[i].sender
