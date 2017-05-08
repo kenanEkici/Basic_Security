@@ -10,23 +10,28 @@ body
  include ../node_modules/socket.io-client/dist/socket.io.js
  | </script>
  | <script>
- include ../public/keepersfindRsa.js
+ include ../public/keepersFindRsa.js
  | </script>
  | <script>
- include ../public/keepersfindAes.js
+ include ../public/keepersFindAes.js
  | </script>
  | <script>
  include ../encryption/HashClient.js
  | </script>
  | <script>
+ include ../public/dropzone.js
+ | </script>
+ | <script>
  include ../public/encryptScript.js
  | </script>
+
+
 div(id="send")
   - var receivedMessages = received[1];
   - var users = received[2];
   script(type='text/javascript').
     var symmetricKeysOfUser = "#{received[0].symmetricKeys}"; 
-    var amountOfKeys = ['#{received[0].symmetricKeys}'].length; 
+    var amountOfKeys = ['#{received[0].symmetricKeys}'].length;
   form(name="logout", method="post", action="/logout")
     input(type="submit", class="settings", id="logout", value="logout")
     input(type="submit", class="settings", id="profile", value="profile")
@@ -39,7 +44,6 @@ div(id="send")
     br
     textarea(name="messageContent", id="text", placeholder="message to be encrypted",rows="10", cols="187")
     br
-    input(type="file", id="file", onchange='chooseFromFile()')
     br
     span(class="blob") Receiver: 
     select(name="selectedUser", id="receiver")
@@ -50,6 +54,8 @@ div(id="send")
     input(type="hidden", id="file_2",name="f2")
     input(type="hidden", id="file_3",name="f3")
     input(type="hidden", id="rec",name="receiverOfMessage")
+    input(type="file" id="fileLoad")
+    div(id="result")
 h1
 div(id="receive")
   h1 Your messages
@@ -62,6 +68,7 @@ div(id="receive")
            p(id=i+"f1")= receivedMessages[i].part1
            p(id=i+"f2")= receivedMessages[i].part2
            p(id=i+"f3")= receivedMessages[i].part3
+           input(id=i+"f4" value=receivedMessages[i].rawData)
            input(type="submit", name="toBeDeleted", value=receivedMessages[i]._id)
            input(type="button", id=i, value="decrypt", onclick='decryptContent(this.id)')
            p(class="verified" ,id=i+"v")

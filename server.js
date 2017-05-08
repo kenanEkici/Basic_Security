@@ -3,6 +3,7 @@ var app = express();
 var http = require("http").createServer(app);
 var io = require( "socket.io" )(http);
 var path = require('path');
+const fs = require('fs');
 
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -11,13 +12,14 @@ var repo = require('./repos');
 
 io.on('connection', function(socket){
     socket.on('messageBob', function(msg){
-        repo.message.sendMessage(msg.f1,  msg.f2, msg.f3, msg.receiver ,msg.sender, function(message)
+        repo.message.sendMessage(msg.f1,  msg.f2, msg.f3, msg.rawData, msg.receiver ,msg.sender, function(message)
         {
+            console.log(msg.rawData);
             io.sockets.emit('responseBob', message);
         });
     });
     socket.on('messageAlice', function(msg){
-        repo.message.sendMessage(msg.f1,  msg.f2, msg.f3, msg.receiver ,msg.sender, function(message)
+        repo.message.sendMessage(msg.f1,  msg.f2, msg.f3, msg.rawData, msg.receiver ,msg.sender, function(message)
         {
             io.sockets.emit('responseAlice', message);
         });

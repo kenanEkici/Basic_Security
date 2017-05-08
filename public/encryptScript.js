@@ -1,7 +1,11 @@
 var socket = io('https://basicsecurity.herokuapp.com',{secure: true});
+var file;
+var fileSelected = false;
 // var socket = io('http://localhost:5000');
 var i;
 var user;
+var unencryptedBinary;
+var encryptedBinary;
 
 $("html").mouseover(function()
 {
@@ -12,10 +16,21 @@ $("body").ready(function()
 {
     user = $("#loggedInUsername").text();
     i = $('#messagesList').children().length;
+
     socket.on('response'+user, function(msg)
     {
         document.title = 'new message from '+msg.sender;
         receivedMessage(msg);
+    });
+
+    $("#fileLoad").change(function() {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var arrayBuffer = this.result;
+            unencryptedBinary = new Uint8Array(arrayBuffer);
+            fileSelected = true;
+        };
+        reader.readAsArrayBuffer(this.files[0]);
     });
 });
 
@@ -25,13 +40,13 @@ function receivedMessage(message)
     var part1 = message.part1;
     var part2 = message.part2;
     var part3 = message.part3;
+    var part4 = JSON.stringify(message.rawData);
     var idMessage = message._id;
 
     $('#messagesList').append($("<li> <span id="+i+"s>"+sender+"</span> <div id='content'><p id="+i+"f1>"+part1+"</p> <p id="+i+"f2>"+part2+"</p>"
-    + "<p id="+i+"f3>"+part3+"</p> <input type='submit' name='toBeDeleted' value="+idMessage+">"
+    + "<p id="+i+"f3>"+part3+"</p> <input id="+i+"f4 value="+part4+"><input type='submit' name='toBeDeleted' value="+idMessage+">"
         + "<input type='button' id="+i+" value='decrypt' onclick='decryptContent(this.id)'>"
     + "<p class='verified' id="+i+"v></p> <p class='notverified' id="+i+"nv></p></div>"));
-
     i++;
 }
 
@@ -50,7 +65,7 @@ function encryptingProc()
     		if (receiver == [symmetricKeysOfUser][i].split(',')[0])
     		{
     			keyToBeUsed = [symmetricKeysOfUser][i].split(',')[1];  
-          cont = true;          			
+                cont = true;
     		}
     		else
     		{    			
@@ -60,34 +75,70 @@ function encryptingProc()
 
       if (cont)
       {
-        var firstProcedure = encryptWithAes(document.getElementById('text').value, keyToBeUsed);
-        document.getElementById('file_1').value = firstProcedure;
+            var firstProcedure;
+            if (fileSelected)
+            {
+                firstProcedure = encryptWithAes(document.getElementById('text').value, keyToBeUsed);
+                encryptedBinary = encryptFileWithAes(unencryptedBinary, keyToBeUsed);
+            }
+            else {
+                encryptedBinary = {};
+                firstProcedure = encryptWithAes(document.getElementById('text').value, keyToBeUsed);
+            }
 
-        var secondProcedure =  encryptWithRsa(receiverPublicKey, keyToBeUsed);
-        document.getElementById('file_2').value = secondProcedure;
+            document.getElementById('file_1').value = firstProcedure;
 
-        var thirdProcedure = encryptWithRsaPrivate(privateKeyOfUserLoggedIn, document.getElementById('text').value.hashCode());
-        document.getElementById('file_3').value = thirdProcedure;
+            var secondProcedure =  encryptWithRsa(receiverPublicKey, keyToBeUsed);
+            document.getElementById('file_2').value = secondProcedure;
 
-        alert("message encrypted");
+            var thirdProcedure = encryptWithRsaPrivate(privateKeyOfUserLoggedIn, document.getElementById('text').value.hashCode());
+            document.getElementById('file_3').value = thirdProcedure;
 
-        var username = $("#loggedInUsername").text();
-        socket.emit('message'+receiver, {f1: firstProcedure, f2:secondProcedure, f3:thirdProcedure, sender: username, receiver: receiver});
+            alert("message encrypted");
 
+            var username = $("#loggedInUsername").text();
+
+            socket.emit('message'+receiver, {f1: firstProcedure, f2:secondProcedure, f3:thirdProcedure, rawData: encryptedBinary, sender: username, receiver: receiver});
       }
     }
 
     function decryptContent(id)
     {
-     
     	var f1 = document.getElementById(id+'f1').innerHTML;
     	var f2 = document.getElementById(id+'f2').innerHTML;
     	var f3 = document.getElementById(id+'f3').innerHTML;
-    	var publicKeyOfSender = document.getElementById('receiver').options[document.getElementById('receiver').selectedIndex].value; 
+        var f4 = document.getElementById(id+'f4').value;
+        f4 = JSON.parse(f4);
+
+
+    	var publicKeyOfSender = document.getElementById('receiver').options[document.getElementById('receiver').selectedIndex].value;
     	var privateKeyOfReceiver = document.getElementById('loggedInUserPrivate').value;
 
+
     	var keyRetrieved = decryptWithRsa(privateKeyOfReceiver, f2);
-      var originalMessage = decryptWithAes(f1, keyRetrieved);
+        var originalMessage = decryptWithAes(f1, keyRetrieved);
+
+        if(f4.data.length > 0)
+        {
+            var originalFile = decryptFileWithAes(f4.data, keyRetrieved);
+
+            var parsed = originalFile;
+            var arr2 = [];
+            for(var x in parsed){
+                arr2.push(parsed[x]);
+            }
+
+            var arr = originalFile;
+            var byteArray = new Uint8Array(arr);
+            var a = window.document.createElement('a');
+
+            a.href = window.URL.createObjectURL(new Blob([byteArray], { type: 'application/octet-stream' }));
+            a.download = "decryptedFile";
+
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
 
       if (originalMessage.hashCode() == decryptWithRsaPublic(publicKeyOfSender,f3)) // --> debug
       {
@@ -101,20 +152,11 @@ function encryptingProc()
       document.getElementById(id+'f1').innerHTML = originalMessage;
       document.getElementById(id+'f2').innerHTML = "";
       document.getElementById(id+'f3').innerHTML = "";
-    } 
-    function chooseFromFile()
-    {
-      var file = document.getElementById('file').files[0]
-      if (file) {
-      var reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = function (evt) {        
-        var str = evt.target.result;
-        document.getElementById("text").value = str;
-      };
-      reader.onerror = function (err)
-      {
-        alert(err);
-      }
-      }
     }
+
+
+
+
+
+
+

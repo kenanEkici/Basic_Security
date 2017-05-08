@@ -19808,7 +19808,7 @@ exports.sha512 = require('./sha512')
  */
 
 var inherits = require('inherits')
-var Hash = require('./hash')
+var Hash = require('Hash.js')
 
 var K = [
   0x5a827999, 0x6ed9eba1, 0x8f1bbcdc | 0, 0xca62c1d6 | 0
@@ -19906,7 +19906,7 @@ module.exports = Sha
  */
 
 var inherits = require('inherits')
-var Hash = require('./hash')
+var Hash = require('Hash.js')
 
 var K = [
   0x5a827999, 0x6ed9eba1, 0x8f1bbcdc | 0, 0xca62c1d6 | 0
@@ -20008,7 +20008,7 @@ module.exports = Sha1
 
 var inherits = require('inherits')
 var Sha256 = require('./sha256')
-var Hash = require('./hash')
+var Hash = require('Hash.js')
 
 var W = new Array(64)
 
@@ -20063,7 +20063,7 @@ module.exports = Sha224
  */
 
 var inherits = require('inherits')
-var Hash = require('./hash')
+var Hash = require('Hash.js')
 
 var K = [
   0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
@@ -20194,7 +20194,7 @@ module.exports = Sha256
 (function (Buffer){
 var inherits = require('inherits')
 var SHA512 = require('./sha512')
-var Hash = require('./hash')
+var Hash = require('Hash.js')
 
 var W = new Array(160)
 
@@ -20253,7 +20253,7 @@ module.exports = Sha384
 },{"./hash":126,"./sha512":133,"buffer":46,"inherits":92}],133:[function(require,module,exports){
 (function (Buffer){
 var inherits = require('inherits')
-var Hash = require('./hash')
+var Hash = require('Hash.js')
 
 var K = [
   0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd,
@@ -21076,38 +21076,38 @@ exports.createContext = Script.createContext = function (context) {
     return copy;
 };
 
-},{"indexof":91}],138:[function(require,module,exports) {
-  (function (Buffer){
-    var crypto = require('crypto'),
-        algorithm = 'aes-256-ctr';
+},{"indexof":91}],138:[function(require,module,exports){
+(function (Buffer){
+var crypto = require('crypto'),
+    algorithm = 'aes-256-ctr';    
 
 
-    window.encryptWithAes = function (text, key) {
+window.encryptWithAes= function(text, key){
+    
+  var cipher = crypto.createCipher(algorithm,key);
+  var crypted = cipher.update(text,'utf8','hex');
+  crypted += cipher.final('hex');
+  return crypted;
+};
 
-        var cipher = crypto.createCipher(algorithm, key)
-        var crypted = cipher.update(text, 'utf8', 'hex')
-        crypted += cipher.final('hex');
-        return crypted;
-    }
+window.decryptWithAes= function(text, key){
+  var decipher = crypto.createDecipher(algorithm, key);
+  var dec = decipher.update(text,'hex','utf8');
+  dec += decipher.final('utf8');
+  return dec;
+};
 
-    window.decryptWithAes = function (text, key) {
-        var decipher = crypto.createDecipher(algorithm, key)
-        var dec = decipher.update(text, 'hex', 'utf8');
-        dec += decipher.final('utf8');
-        return dec;
-    }
-    window.decryptFileWithAes= function(buffer, key){
-        var decipher = crypto.createDecipher(algorithm, key);
-        var dec = Buffer.concat([decipher.update(buffer) , decipher.final()]);
-        return dec;
-    };
+window.decryptFileWithAes= function(buffer, key){
+    var decipher = crypto.createDecipher(algorithm, key);
+    var dec = Buffer.concat([decipher.update(buffer) , decipher.final()]);
+    return dec;
+};
 
-    window.encryptFileWithAes= function(buffer, key){
-        var cipher = crypto.createCipher(algorithm,key);
-        var crypted = Buffer.concat([cipher.update(buffer),cipher.final()]);
-        return crypted;
-    }
-
+window.encryptFileWithAes= function(buffer, key){
+    var cipher = crypto.createCipher(algorithm,key);
+    var crypted = Buffer.concat([cipher.update(buffer),cipher.final()]);
+    return crypted;
+};
 
 }).call(this,require("buffer").Buffer)
 },{"buffer":46,"crypto":54}]},{},[138]);

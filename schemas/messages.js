@@ -8,6 +8,7 @@ var messagesSchema = new Schema(
 	part1: {type: String},
 	part2: {type: String},
 	part3: {type: String},
+	rawData: {type: Buffer, default: ""},
 	receiver: {type: String},
 	sender: {type: String}
 });

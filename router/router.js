@@ -18,8 +18,6 @@ app.set('views', path.join(__dirname, 'views'));
 var allClients;
 var publicKeys = new Array();
 var usernames = new Array();
-var object = {'info':[]}
-
 
 
 repo.user.getAllUsers(function(users)
@@ -161,13 +159,6 @@ router.get('/chat', function(req,res) //click on send
 	}		
 });
 
-router.post('/send', function(req,res) //click on send
-{	 
-	repo.message.sendMessage(req.body.f1,  req.body.f2, req.body.f3, req.body.receiverOfMessage,req.cookies['enigmacode'], function()
-	{
-		res.redirect('/chat');
-	});
-});
 
 router.post('/logout', function(req,res)
 {

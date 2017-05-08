@@ -5,18 +5,20 @@ var Message = model.message;
 module.exports = 
 {
 
-sendMessage: function(pt1, pt2, pt3, receiver, sender,callback)
-{	
+sendMessage: function(pt1, pt2, pt3, raw, receiver, sender,callback)
+{
+	console.log(raw);
 	var message = new Message({
 		part1: pt1,
 		part2: pt2,
 		part3: pt3,
+		rawData: raw.data,
 		receiver: receiver,
 		sender: sender	
 	});
 
-	message.save()
-	console.log('Message from ' + sender + ' to ' + receiver + ' has been send');
+	message.save();
+	console.log("message sent from " + sender + " to " + receiver);
 	return callback(message);
 	
 },
